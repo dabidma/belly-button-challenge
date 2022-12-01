@@ -98,12 +98,48 @@ function grabData_createCharts(id){
 
         Plotly.newPlot('gauge', gauge_data, gauge_layout);
     });
-    
+
+};
+//function to fill in demo box
+function demographic_info(id){
+    //grab metadata
+    d3.json(url).then(function (data) {
+        let metadata = data.metadata;
+        
+        //filter the meta data
+        let first_md =  metadata.filter(info => info.id == id)[0];
+        console.log(first_md)
+
+        //select the demographic box
+        let demo_data = d3.select('#sample-metadata');
+
+        //delete anything in the box
+        demo_data.html('');
+
+        Object.entries(first_md).forEach(([key, value]) => {
+            demo_data.append('p').text(`${key}: ${value}`)
+        });
+    });
+};
+//function to update all the charts
+function optionChanged(id){
+    console.log(`Updated for test subject ${id}`);
+    grabData_createCharts(id);
+    demographic_info(id)
 };
 function init(){
+    //dropdown menu variable
+    let dropwdown = d3.select('#selDataset');
+
+    //preload all data
     d3.json(url).then(function (data){
         let names = data.names;
+        //input variables for the dropdown menu
+        names.forEach(name => {
+            dropwdown.append('option').text(name).property('value', name)
+        });
         grabData_createCharts(names[0]);
+        demographic_info(names[0]);
     });
 };
 init();
