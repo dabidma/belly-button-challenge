@@ -13,11 +13,11 @@ function grabData_createCharts(id){
         
         //bar and bubble chart variables from sample
         let sample_values = first_sample.sample_values;
-        console.log(sample_values);
+        // console.log(sample_values);
         let otu_ids = first_sample.otu_ids;
-        console.log(otu_ids);
+        // console.log(otu_ids);
         let otu_labels = first_sample.otu_labels;
-        console.log(otu_labels);
+        // console.log(otu_labels);
 
         //wash frequency variable from metadata
         let wash_frequency = first_md.wfreq;
@@ -45,6 +45,9 @@ function grabData_createCharts(id){
     
 };
 function init(){
-    grabData_createCharts(names[0])
+    d3.json(url).then(function (data){
+        let names = data.names;
+        grabData_createCharts(names[0]);
+    });
 };
 init();
