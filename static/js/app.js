@@ -21,9 +21,10 @@ function grabData_createCharts(id){
 
         //wash frequency variable from metadata
         let wash_frequency = first_md.wfreq;
+        // console.log(wash_frequency);
 
         //creating the bar chart
-        //trace
+        //bar chart trace
         let bar_data = [{
             //grab top 10 OTU's
             x: sample_values.slice(0, 10).reverse(),
@@ -41,7 +42,62 @@ function grabData_createCharts(id){
         };
         
         Plotly.newPlot('bar', bar_data, bar_layout);
-    })
+
+        //creating the bubble chart data
+        //bubble chart trace
+        let bubble_data = [{
+            x: otu_ids,
+            y: sample_values,
+            text: otu_labels,
+            mode: 'markers',
+            //marker size and color
+            marker: {
+                color: otu_ids,
+                size: sample_values
+            }
+        }];
+        //bubble chart layout
+        let bubble_layout = {
+            title: 'Belly Button Samples by OTU ID',
+            xaxis: {title: 'OTU ID'},
+            yaxis: {title: 'Sample Values'}
+        };
+
+        Plotly.newPlot('bubble', bubble_data, bubble_layout);
+
+        //Creating the guage chart
+        //gauge chart trace
+        let gauge_data = [{
+            domain: {x: [0,1], y: [0,1]},
+            value: wash_frequency,
+            title: {text: 'Belly Button Washing Frequency (Scrubs per Week)'},
+            type: 'indicator',
+            mode: 'gauge+number',
+            gauge: {
+                axis: {range: [0,9]},
+                steps: [
+                    {range: [0, 1], color: '#f7f2ec'},
+                    {range: [1, 2], color: '#f3f0e5'},
+                    {range: [2, 3], color: '#e9e7c9'},
+                    {range: [3, 4], color: '#e5e9b0'},
+                    {range: [4, 5], color: '#d5e595'},
+                    {range: [5, 6], color: '#b7cd8b'},
+                    {range: [6, 7], color: '#87c080'},
+                    {range: [7, 8], color: '#85bc8b'},
+                    {range: [8, 9], color: '#80b586'}
+                ]
+            }
+        }];
+
+        //gauge chart layout
+        let gauge_layout = {
+            width: 400,
+            height: 300,
+            margin: { t: 0, b: 0 } 
+        };
+
+        Plotly.newPlot('gauge', gauge_data, gauge_layout);
+    });
     
 };
 function init(){
